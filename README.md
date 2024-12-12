@@ -1,0 +1,1 @@
+# standart-docker-stack
