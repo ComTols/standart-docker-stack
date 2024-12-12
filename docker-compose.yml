@@ -28,7 +28,18 @@ services:
         aliases:
           - gitlab.local
     environment:
-      - EXTERNAL_URL=${EXTERNAL_URL}
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://gitlab.maxtar.de'
+        nginx['listen_port'] = 80
+        nginx['listen_https'] = false
+        nginx['proxy_set_headers'] = {
+          "X-Forwarded-Host" => "gitlab.maxtar.de",
+          "X-Forwarded-Proto" => "https",
+          "X-Forwarded-Ssl" => "on"
+        }
+        gitlab_rails['gitlab_shell_ssh_port'] = 2424
+        gitlab_rails['gitlab_https'] = true
+        gitlab_rails['internal_api_url'] = 'http://gitlab.local'
     ports:
       - '2424:22'
     volumes:
