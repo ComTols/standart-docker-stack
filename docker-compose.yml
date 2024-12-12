@@ -37,6 +37,17 @@ services:
       - gitlab-logs:/var/log/gitlab
       - gitlab-data:/var/opt/gitlab
     shm_size: '256m'
+  gitlab-runner:
+    image: gitlab/gitlab-runner:latest
+    container_name: gitlab-runner
+    restart: always
+    networks:
+      internal_network:
+        aliases:
+          - gitlab-runner.local
+    volumes:
+      - gitlab-runner:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
   nginx-data:
@@ -44,6 +55,7 @@ volumes:
   gitlab-config:
   gitlab-logs:
   gitlab-data:
+  gitlab-runner:
 
 networks:
   internal_network:
