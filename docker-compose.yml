@@ -28,8 +28,7 @@ services:
         aliases:
           - gitlab.local
     environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        gitlab_rails['gitlab_shell_ssh_port'] = 2424
+      - EXTERNAL_URL=${EXTERNAL_URL}
     ports:
       - '2424:22'
     volumes:
@@ -46,10 +45,12 @@ services:
         aliases:
           - gitlab-runner.local
     volumes:
+      - local-ca:/etc/gitlab-runner/certs
       - gitlab-runner:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
 
 volumes:
+  local-ca:
   nginx-data:
   letsencrypt:
   gitlab-config:
