@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  app:
+  nginx:
     image: 'jc21/nginx-proxy-manager:latest'
     container_name: nginx-proxy
     restart: always
@@ -12,14 +12,37 @@ services:
     ports:
       - '80:80'
       - '81:81'
+      - '2222:81'
       - '443:443'
     volumes:
       - nginx-data:/data
       - letsencrypt:/etc/letsencrypt
+  gitlab:
+    image: gitlab/gitlab-ce
+    container_name: gitlab
+    restart: always
+    networks:
+      internal_network:
+        aliases:
+          - gitlab.local
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'https://gitlab.maximilian-schueller.de'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2424
+    ports:
+      - '2424:22'
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+    shm_size: '256m'
 
 volumes:
   nginx-data:
   letsencrypt:
+  gitlab-config:
+  gitlab-logs:
+  gitlab-data:
 
 networks:
   internal_network:
