@@ -12,7 +12,7 @@ services:
     ports:
       - '80:80'
       - '81:81'
-      - '2222:81'
+      - '8080:81'
       - '443:443'
     volumes:
       - nginx-data:/data
