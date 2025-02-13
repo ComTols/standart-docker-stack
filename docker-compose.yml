@@ -69,8 +69,12 @@ services:
           - registry.local
     environment:
       REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /var/lib/registry
+      REGISTRY_AUTH: htpasswd
+      REGISTRY_AUTH_HTPASSWD_PATH: /auth/htpasswd
+      REGISTRY_AUTH_HTPASSWD_REALM: "Private Docker Registry"
     volumes:
       - registry_data:/var/lib/registry
+      - registry_auth:/auth
 
 volumes:
   local-ca:
@@ -81,6 +85,7 @@ volumes:
   gitlab-data:
   gitlab-runner:
   registry_data:
+  registry_auth:
 
 networks:
   internal_network:
